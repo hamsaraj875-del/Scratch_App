@@ -16,5 +16,10 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        val intent = getIntent();
+        var name = intent.getStringExtra("name");
+        var email = intent.getStringExtra("email");
+        var password = intent.getStringExtra("password");
     }
 }
