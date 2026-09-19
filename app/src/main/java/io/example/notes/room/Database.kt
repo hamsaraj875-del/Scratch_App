@@ -1,4 +1,4 @@
-package io.example.notes
+package io.example.notes.room
 
 import android.content.Context
 import androidx.room.Database
@@ -15,11 +15,13 @@ abstract class AppDatabase : RoomDatabase() {
 
         fun getInstance(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
-                Room.databaseBuilder(
-                    context.applicationContext,
-                    AppDatabase::class.java,
-                    "notes_database"
-                ).build().also { INSTANCE = it }
+                var instance = INSTANCE;
+                if(instance==null){
+                    instance = Room.databaseBuilder(context.applicationContext,AppDatabase::class.java,"User").build();
+                }
+
+                INSTANCE = instance;
+                return instance;
             }
         }
     }

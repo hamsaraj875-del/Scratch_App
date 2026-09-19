@@ -9,6 +9,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
+import io.example.notes.repository.DatabaseRepository
+import io.example.notes.room.AppDatabase
+import io.example.notes.room.User
+import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,6 +31,9 @@ class LoginActivity : AppCompatActivity() {
         var userPassword : EditText;
         var btnLogin: Button;
 
+        var db = AppDatabase.getInstance(applicationContext);
+        var repository = DatabaseRepository(db.userDao());
+
 
         userName = findViewById(R.id.userName);
         userEmail = findViewById(R.id.userEmail);
@@ -37,13 +45,22 @@ class LoginActivity : AppCompatActivity() {
             var email = userEmail.text.toString();
             var password = userPassword.text.toString();
             if(name.isEmpty() || email.isEmpty() || password.isEmpty()){
-                Toast.makeText(this,"Fields cannot be empty !",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this@LoginActivity,"Fields cannot be empty !",Toast.LENGTH_SHORT).show();
             }else{
-                var intent = Intent(this, MainActivity::class.java);
-                intent.putExtra("name",name);
-                intent.putExtra("email",email);
-                intent.putExtra("password",password);
-                startActivity(intent);
+                var id:Long=0;
+                lifecycleScope.launch{
+                    id = repository.insert(
+                        User(
+                            name = name,
+                            email = email,
+                            password = password
+                        )
+                    );
+                }
+                Toast.makeText(this@LoginActivity,"Sign up is successfull",Toast.LENGTH_SHORT).show();
+                var intent = Intent(this,MainActivity::class.java);
+                intent.putExtra("userId",id);
+                startActivity(intent,);
             }
         }
 
