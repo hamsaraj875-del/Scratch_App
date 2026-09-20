@@ -25,4 +25,16 @@ class DatabaseRepository(private val userDao: UserDao) {
         return userDao.updateUserName(email,newName);
     }
 
+    suspend fun getLoggedInUser():User?{
+        return userDao.getLoggedInUser();
+    }
+
+    suspend fun getUserByEmail(email:String):User?{
+        return userDao.getUserByEmail(email);
+    }
+
+    suspend fun logout(userId:Long):Boolean{
+        return userDao.logoutUsers(userId)>0;
+    }
+
 }

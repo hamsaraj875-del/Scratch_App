@@ -25,29 +25,20 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-
         val userNameText: TextView;
-
-
         userNameText = findViewById(R.id.userName);
-
-        val getIntent = getIntent();
-        var userId = getIntent.getLongExtra("userId",-1);
 
         var db = AppDatabase.getInstance(applicationContext);
         var repository = DatabaseRepository(db.userDao());
 
-        if(userId == -1L){
-            var i = Intent(this,LoginActivity::class.java);
-            startActivity(i);
-            return;
-        }else{
-
-            lifecycleScope.launch{
-                val userData = repository.getUserById(userId);
-                if (userData != null) {
-                    userNameText.text = userData.name;
-                }
+        lifecycleScope.launch {
+            var user = repository.getLoggedInUser();
+            if (user == null) {
+                var intent = Intent(this@MainActivity, LoginActivity::class.java);
+                startActivity(intent);
+                finish();
+            } else {
+                userNameText.text = user.name;
             }
         }
     }

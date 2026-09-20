@@ -26,41 +26,48 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
-        var userName : EditText;
         var userEmail :EditText;
         var userPassword : EditText;
         var btnLogin: Button;
+        var redirectSign:Button;
 
         var db = AppDatabase.getInstance(applicationContext);
         var repository = DatabaseRepository(db.userDao());
 
-
-        userName = findViewById(R.id.userName);
         userEmail = findViewById(R.id.userEmail);
         userPassword = findViewById(R.id.userPassword);
         btnLogin = findViewById(R.id.btnLogin);
+        redirectSign = findViewById(R.id.redirectSign);
+
+        redirectSign.setOnClickListener{
+            var intent = Intent(this@LoginActivity,SignupActivity::class.java);
+            startActivity(intent);
+        }
 
         btnLogin.setOnClickListener{
-            var name = userName.text.toString();
             var email = userEmail.text.toString();
             var password = userPassword.text.toString();
-            if(name.isEmpty() || email.isEmpty() || password.isEmpty()){
+            if(email.isEmpty() || password.isEmpty()){
                 Toast.makeText(this@LoginActivity,"Fields cannot be empty !",Toast.LENGTH_SHORT).show();
             }else{
                 var id:Long=0;
                 lifecycleScope.launch{
-                    id = repository.insert(
-                        User(
-                            name = name,
-                            email = email,
-                            password = password
-                        )
-                    );
+
+                    var user = repository.getUserByEmail(email);
+
+                    if(user==null){
+                        Toast.makeText(this@LoginActivity,"Account not exist please sign up first !",Toast.LENGTH_SHORT).show();
+                    }else{
+                        if(user.email == email && user.password == password){
+                            Toast.makeText(this@LoginActivity,"Login successfull"+user.name,Toast.LENGTH_SHORT).show();
+                            var intent = Intent(this@LoginActivity,MainActivity::class.java);
+                            startActivity(intent);
+                        }else{
+                            Toast.makeText(this@LoginActivity,"Invalid credentials please try again",Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 }
-                Toast.makeText(this@LoginActivity,"Sign up is successfull",Toast.LENGTH_SHORT).show();
-                var intent = Intent(this,MainActivity::class.java);
-                intent.putExtra("userId",id);
-                startActivity(intent,);
+
             }
         }
 
