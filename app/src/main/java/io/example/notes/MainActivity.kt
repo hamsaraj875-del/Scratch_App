@@ -1,3 +1,4 @@
+
 package io.example.notes
 
 import android.content.Intent
@@ -11,7 +12,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import io.example.notes.repository.DatabaseRepository
 import io.example.notes.room.AppDatabase
-import io.example.notes.room.User
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -26,8 +26,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         val userNameText: TextView;
-        userNameText = findViewById(R.id.userName);
-
+        val profileIcon:TextView;
+        profileIcon = findViewById(R.id.profileIcon)
         var db = AppDatabase.getInstance(applicationContext);
         var repository = DatabaseRepository(db.userDao());
 
@@ -38,7 +38,8 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent);
                 finish();
             } else {
-                userNameText.text = user.name;
+                profileIcon.text = user.name?.get(0).toString();
+                Toast.makeText(this@MainActivity,"Welcome "+user.name,Toast.LENGTH_SHORT).show();
             }
         }
     }

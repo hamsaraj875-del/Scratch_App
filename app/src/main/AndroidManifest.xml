@@ -13,6 +13,7 @@
         android:theme="@style/Theme.Notes">
         <activity
             android:name=".SignupActivity"
+            android:windowSoftInputMode="adjustNothing"
             android:exported="false" />
         <activity
             android:name=".AppPromo"
@@ -20,9 +21,11 @@
         </activity>
         <activity
             android:name=".LoginActivity"
+            android:windowSoftInputMode="adjustNothing"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
+            android:windowSoftInputMode="adjustNothing"
             android:exported="true">
 
             <intent-filter>
