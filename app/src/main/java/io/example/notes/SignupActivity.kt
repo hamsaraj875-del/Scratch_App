@@ -2,14 +2,14 @@ package io.example.notes
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputEditText
 import io.example.notes.repository.DatabaseRepository
 import io.example.notes.room.AppDatabase
 import io.example.notes.room.User
@@ -26,11 +26,11 @@ class SignupActivity : AppCompatActivity() {
             insets
         }
 
-        var btnSignUp: Button;
-        var redirectLogin:Button;
-        var userName: EditText;
-        var userEmail:EditText;
-        var userPassword:EditText;
+        var btnSignUp: MaterialButton;
+        var redirectLogin:MaterialButton;
+        var userName: TextInputEditText;
+        var userEmail:TextInputEditText;
+        var userPassword:TextInputEditText;
 
         btnSignUp = findViewById(R.id.btnSignup);
         redirectLogin = findViewById(R.id.redirectLogin);
@@ -40,7 +40,7 @@ class SignupActivity : AppCompatActivity() {
 
 
         var db = AppDatabase.getInstance(applicationContext);
-        var repository = DatabaseRepository(db.userDao());
+        var repository = DatabaseRepository(db.userDao(), db.noteDao());
 
 
 

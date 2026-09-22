@@ -8,21 +8,49 @@
     android:background="@drawable/promo"
     tools:context=".AppPromo">
 
+    <TextView
+        android:id="@+id/appTagline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="308dp"
+        android:gravity="center"
+        android:text="Your thoughts. Your notes."
+        android:textColor="#D0D3DF"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/Tagline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="308dp"
+        android:gravity="center"
+        android:text="Your space."
+        android:textColor="#4CAF50"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/appTagline"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Button
         android:id="@+id/getStartedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="116dp"
+        android:layout_marginBottom="92dp"
         android:backgroundTint="@color/purple_500"
         android:drawableEnd="@drawable/baseline_arrow_forward_24"
-        android:paddingLeft="20dp"
-        android:paddingRight="15dp"
+        android:paddingLeft="40dp"
+        android:paddingRight="35dp"
         android:text="Get Started"
         android:textColor="@color/white"
         android:textSize="25sp"
+        app:cornerRadius="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

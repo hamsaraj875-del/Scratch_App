@@ -10,4 +10,6 @@ data class Note (
     val userId:Int,
     val title:String,
     val content:String,
+    val date:String,
+    val pinned:Int,
 )
