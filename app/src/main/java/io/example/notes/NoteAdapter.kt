@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.example.notes.room.Note
 
-class NoteAdapter(private var notes: List<Note>) : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
+class NoteAdapter(private var notes: List<Note>,private val onNoteClick: (Note) -> Unit) : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
 
     class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -36,6 +36,10 @@ class NoteAdapter(private var notes: List<Note>) : RecyclerView.Adapter<NoteAdap
         holder.title.text = note.title
         holder.content.text = note.content
         holder.date.text = note.date
+
+        holder.itemView.setOnClickListener {
+            onNoteClick(note)
+        }
     }
 
     override fun getItemCount(): Int {

@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.example.notes.repository.DatabaseRepository
 import io.example.notes.room.AppDatabase
+import io.example.notes.room.Note
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -51,7 +52,9 @@ class MainActivity : AppCompatActivity() {
 
 
         recyclerView.layoutManager = LinearLayoutManager(this@MainActivity);
-        val adapter = NoteAdapter(emptyList());
+        val adapter = NoteAdapter(emptyList()) { note ->
+            showNoteReader(note);
+        }
         recyclerView.adapter = adapter
 
 
@@ -87,6 +90,15 @@ class MainActivity : AppCompatActivity() {
     fun noteCreation(userId:Int){
         var intent = Intent(this@MainActivity,NewRoom::class.java);
         intent.putExtra("userId",userId);
+        startActivity(intent);
+    }
+
+    fun showNoteReader(note:Note){
+        var intent = Intent(this@MainActivity,NotesReader::class.java);
+        intent.putExtra("noteId",note.id);
+        intent.putExtra("title",note.title);
+        intent.putExtra("content",note.content);
+        intent.putExtra("date",note.date);
         startActivity(intent);
     }
 
