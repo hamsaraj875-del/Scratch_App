@@ -16,6 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="New Note"
+        android:layout_margin="10dp"
         android:textColor="@color/white"
         android:textSize="28sp"
         android:textStyle="bold"
@@ -24,6 +25,7 @@
 
     <TextView
         android:id="@+id/screenSubtitle"
+        android:layout_margin="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
@@ -34,6 +36,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
+        android:layout_margin="10dp"
         android:id="@+id/titleLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -63,6 +66,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:layout_margin="10dp"
         android:id="@+id/contentLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -94,6 +98,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
+        android:layout_margin="10dp"
         android:id="@+id/btnSave"
         android:layout_width="0dp"
         android:layout_height="58dp"

@@ -1,5 +1,6 @@
 package io.example.notes.repository
 
+import androidx.lifecycle.LiveData
 import io.example.notes.room.Note
 import io.example.notes.room.NoteDao
 import io.example.notes.room.User
@@ -44,7 +45,7 @@ class DatabaseRepository(private val userDao: UserDao, private val noteDao: Note
 
     //User notes data provider
 
-    suspend fun getAllNotes(userId: Int):List<Note>{
+    suspend fun getAllNotes(userId: Int): LiveData<List<Note>> {
         return noteDao.getAllNotesOfUser(userId);
     }
 

@@ -50,6 +50,11 @@ class MainActivity : AppCompatActivity() {
         val emptyNotesLayout = findViewById<LinearLayout>(R.id.emptyNotesLayout)
 
 
+        recyclerView.layoutManager = LinearLayoutManager(this@MainActivity);
+        val adapter = NoteAdapter(emptyList());
+        recyclerView.adapter = adapter
+
+
         //new note creation
         newRoomButton.setOnClickListener{
             noteCreation(userId);
@@ -63,16 +68,15 @@ class MainActivity : AppCompatActivity() {
                 finish();
             } else {
                 userId = user.id;
-                var userNotes = repository.getAllNotes(user.id);
-                if(userNotes.isEmpty()){
-                    recyclerView.visibility = View.GONE;
-                    emptyNotesLayout.visibility = View.VISIBLE;
-                }else{
-                    emptyNotesLayout.visibility = View.GONE;
-                    recyclerView.visibility = View.VISIBLE;
-                    recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
-                    val adapter = NoteAdapter(userNotes)
-                    recyclerView.adapter = adapter
+                repository.getAllNotes(user.id).observe(this@MainActivity){userNotes->
+                    if(userNotes.isEmpty()){
+                        recyclerView.visibility = View.GONE;
+                        emptyNotesLayout.visibility = View.VISIBLE;
+                    }else{
+                        emptyNotesLayout.visibility = View.GONE;
+                        recyclerView.visibility = View.VISIBLE;
+                        adapter.updateNotes(userNotes);
+                    }
                 }
                 profileIcon.text = user.name?.get(0).toString();
                 Toast.makeText(this@MainActivity, "Welcome " + user.name, Toast.LENGTH_SHORT).show();
