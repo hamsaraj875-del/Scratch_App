@@ -33,6 +33,9 @@ interface UserDao {
     @Query("SELECT * FROM users WHERE loggedIn = 1 LIMIT 1")
     suspend fun getLoggedInUser(): User?
 
+    @Query("SELECT * FROM users")
+    suspend fun getAllUser():List<User>?
+
     @Query("UPDATE users SET loggedIn=0 WHERE id=:userId")
     suspend fun logoutUsers(userId:Long):Int;
 

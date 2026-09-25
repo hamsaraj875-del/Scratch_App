@@ -34,6 +34,10 @@ class DatabaseRepository(private val userDao: UserDao, private val noteDao: Note
         return userDao.getLoggedInUser();
     }
 
+    suspend fun getAllUser():List<User>?{
+        return userDao.getAllUser();
+    }
+
     suspend fun getUserByEmail(email:String):User?{
         return userDao.getUserByEmail(email);
     }
@@ -51,6 +55,10 @@ class DatabaseRepository(private val userDao: UserDao, private val noteDao: Note
 
     suspend fun insertNote(note:Note):Long{
         return noteDao.insertNote(note);
+    }
+
+    suspend fun deleteNote(note:Note){
+        return noteDao.deleteNote(note);
     }
 
 }

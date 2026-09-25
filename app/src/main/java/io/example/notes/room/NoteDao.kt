@@ -12,9 +12,9 @@ interface NoteDao{
     @Insert
     suspend fun insertNote(note:Note):Long;
 
+    @Delete
+    suspend fun deleteNote(note:Note);
 
-    @Query("DELETE FROM notes WHERE id = :noteId AND userId = :userId")
-    suspend fun deleteNote(userId: Int, noteId: Int): Int
 
     @Query("SELECT * FROM notes WHERE userId = :userId")
     fun getAllNotesOfUser(userId:Int): LiveData<List<Note>>;

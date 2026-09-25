@@ -51,10 +51,24 @@ class MainActivity : AppCompatActivity() {
         val emptyNotesLayout = findViewById<LinearLayout>(R.id.emptyNotesLayout)
 
 
-        recyclerView.layoutManager = LinearLayoutManager(this@MainActivity);
-        val adapter = NoteAdapter(emptyList()) { note ->
-            showNoteReader(note);
+        profileIcon.setOnClickListener{
+            accountDetails(userId);
         }
+
+
+
+        recyclerView.layoutManager = LinearLayoutManager(this@MainActivity);
+        val adapter = NoteAdapter(
+            emptyList(),
+            // Delete callback
+            { note ->
+                deleteNote(note, repository)
+            },
+            // Open note callback
+            { note ->
+                showNoteReader(note)
+            }
+        )
         recyclerView.adapter = adapter
 
 
@@ -65,7 +79,13 @@ class MainActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             var user = repository.getLoggedInUser();
-            if (user == null) {
+            var users = repository.getAllUser();
+            if(users == null || users.isEmpty()){
+                var intent = Intent(this@MainActivity,AppPromo::class.java);
+                startActivity(intent);
+                finish();
+            }
+            else if (user == null) {
                 var intent = Intent(this@MainActivity, LoginActivity::class.java);
                 startActivity(intent);
                 finish();
@@ -100,6 +120,17 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra("content",note.content);
         intent.putExtra("date",note.date);
         startActivity(intent);
+    }
+
+    fun deleteNote(note:Note,repository:DatabaseRepository){
+        lifecycleScope.launch{
+            repository.deleteNote(note);
+            Toast.makeText(this@MainActivity,note.title + " Deleted Successfully ",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    fun accountDetails(userId:Int){
+        var intent = Intent(this@MainActivity,)
     }
 
 }
