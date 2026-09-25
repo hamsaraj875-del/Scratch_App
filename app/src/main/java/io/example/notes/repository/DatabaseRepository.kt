@@ -19,7 +19,7 @@ class DatabaseRepository(private val userDao: UserDao, private val noteDao: Note
         return userDao.deleteUser(user);
     }
 
-    suspend fun getUserById(userId:Long): User {
+    suspend fun getUserById(userId:Int): User {
         return userDao.getUserById(userId);
     }
 
@@ -42,7 +42,7 @@ class DatabaseRepository(private val userDao: UserDao, private val noteDao: Note
         return userDao.getUserByEmail(email);
     }
 
-    suspend fun logout(userId:Long):Boolean{
+    suspend fun logout(userId:Int):Boolean{
         return userDao.logoutUsers(userId)>0;
     }
 

@@ -130,7 +130,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun accountDetails(userId:Int){
-        var intent = Intent(this@MainActivity,)
+        var intent = Intent(this@MainActivity,Account::class.java);
+        intent.putExtra("userId",userId);
+        startActivity(intent);
     }
 
 }

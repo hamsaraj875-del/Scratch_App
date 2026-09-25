@@ -25,7 +25,7 @@ interface UserDao {
     suspend fun loginUser(email: String, password: String): User?
 
     @Query("SELECT * FROM users WHERE id=:userId")
-    suspend fun getUserById(userId:Long): User;
+    suspend fun getUserById(userId:Int): User;
 
     @Query("SELECT * FROM users WHERE email=:email")
     suspend fun getUserByEmail(email:String):User?;
@@ -37,7 +37,7 @@ interface UserDao {
     suspend fun getAllUser():List<User>?
 
     @Query("UPDATE users SET loggedIn=0 WHERE id=:userId")
-    suspend fun logoutUsers(userId:Long):Int;
+    suspend fun logoutUsers(userId:Int):Int;
 
 
 }
