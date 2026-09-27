@@ -58,9 +58,14 @@ class LoginActivity : AppCompatActivity() {
                         Toast.makeText(this@LoginActivity,"Account not exist please sign up first !",Toast.LENGTH_SHORT).show();
                     }else{
                         if(user.email == email && user.password == password){
-                            Toast.makeText(this@LoginActivity,"Login successfull"+user.name,Toast.LENGTH_SHORT).show();
-                            var intent = Intent(this@LoginActivity,MainActivity::class.java);
-                            startActivity(intent);
+                            var login = repository.login(email);
+                            if(login){
+                                Toast.makeText(this@LoginActivity,"Login successfull"+user.name,Toast.LENGTH_SHORT).show();
+                                var intent = Intent(this@LoginActivity,MainActivity::class.java);
+                                startActivity(intent);
+                            }else{
+                                Toast.makeText(this@LoginActivity,"Internal servers error please try again !",Toast.LENGTH_SHORT).show();
+                            }
                         }else{
                             Toast.makeText(this@LoginActivity,"Invalid credentials please try again",Toast.LENGTH_SHORT).show();
                         }

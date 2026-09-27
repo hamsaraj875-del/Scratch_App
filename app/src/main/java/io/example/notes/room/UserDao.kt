@@ -18,8 +18,8 @@ interface UserDao {
     @Query("UPDATE users SET password = :newPassword WHERE email = :email ")
     suspend fun updateUserPassword(email:String,newPassword:String):Int;
 
-    @Query("UPDATE users SET name = :newName WHERE email = :email")
-    suspend fun updateUserName(email:String,newName:String):Int;
+    @Query("UPDATE users SET name = :name , email = :email WHERE id=:userId")
+    suspend fun updateProfile(userId:Int,name:String,email:String):Int;
 
     @Query("SELECT * FROM users WHERE email = :email AND password = :password LIMIT 1")
     suspend fun loginUser(email: String, password: String): User?
@@ -39,5 +39,7 @@ interface UserDao {
     @Query("UPDATE users SET loggedIn=0 WHERE id=:userId")
     suspend fun logoutUsers(userId:Int):Int;
 
+    @Query("UPDATE users SET loggedIn=1 WHERE email=:email")
+    suspend fun login(email:String):Int;
 
 }

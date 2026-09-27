@@ -15,19 +15,12 @@ class DatabaseRepository(private val userDao: UserDao, private val noteDao: Note
         return userDao.insertUser(user);
     }
 
-    suspend fun delete(user:User){
-        return userDao.deleteUser(user);
-    }
-
     suspend fun getUserById(userId:Int): User {
         return userDao.getUserById(userId);
     }
 
-    suspend fun updatePassword(email:String ,newPassword:String):Int{
-        return userDao.updateUserPassword(email,newPassword);
-    }
-    suspend fun updateName(email:String,newName:String):Int{
-        return userDao.updateUserName(email,newName);
+    suspend fun updateProfile(userId:Int,name:String,email:String):Int{
+        return userDao.updateProfile(userId,name,email);
     }
 
     suspend fun getLoggedInUser():User?{
@@ -40,6 +33,10 @@ class DatabaseRepository(private val userDao: UserDao, private val noteDao: Note
 
     suspend fun getUserByEmail(email:String):User?{
         return userDao.getUserByEmail(email);
+    }
+
+    suspend fun login(email:String):Boolean{
+        return userDao.login(email)>0;
     }
 
     suspend fun logout(userId:Int):Boolean{
@@ -60,5 +57,6 @@ class DatabaseRepository(private val userDao: UserDao, private val noteDao: Note
     suspend fun deleteNote(note:Note){
         return noteDao.deleteNote(note);
     }
+
 
 }

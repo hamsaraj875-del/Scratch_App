@@ -1,7 +1,10 @@
 package io.example.notes
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -26,32 +29,72 @@ class Account : AppCompatActivity() {
 
         var btnLogout : Button;
         var user: User;
+        var btnEditProfile : LinearLayout
+        var btnChangePassword :LinearLayout
+        var accountName:TextView;
+        var accountEmail: TextView
+        var infoName:TextView;
+        var infoEmail:TextView;
 
 
         btnLogout = findViewById(R.id.btnLogout);
+        accountName = findViewById(R.id.accountName);
+        accountEmail = findViewById(R.id.accountEmail);
+        infoName = findViewById(R.id.infoName);
+        infoEmail = findViewById(R.id.infoEmail);
+        btnEditProfile = findViewById(R.id.btnEditProfile);
+        btnChangePassword = findViewById(R.id.btnChangePassword);
+
+
         var db = AppDatabase.getInstance(applicationContext);
         var repository = DatabaseRepository(db.userDao(), db.noteDao());
 
         var userId = intent.getIntExtra("userId",-1);
-        if(userId==1){
+        if(userId==-1){
             finish();
         }else{
             lifecycleScope.launch{
                 user = repository.getUserById(userId);
+                accountName.text = user.name;
+                accountEmail.text = user.email;
+                infoName.text = user.name;
+                infoEmail.text = user.email;
             }
         }
 
 
         btnLogout.setOnClickListener{
-            lifecycleScope.launch{
-                var logout = repository.logout(userId);
-                if(logout){
-                    Toast.makeText(this@Account,"Logout Successfull", Toast.LENGTH_SHORT).show();
-                    finish();
-                }else{
-                    Toast.makeText(this@Account,"Logout unsuccessfull ",Toast.LENGTH_SHORT).show();
-                }
+            logout(repository,userId);
+        }
+
+        btnEditProfile.setOnClickListener{
+            editProfile(userId);
+        }
+
+
+    }
+    fun logout(repository:DatabaseRepository,userId:Int){
+        lifecycleScope.launch{
+            var logout = repository.logout(userId);
+            if(logout){
+                Toast.makeText(this@Account,"Logout Successfull", Toast.LENGTH_SHORT).show();
+                var intent = Intent(this@Account, SignupActivity::class.java);
+                intent.addFlags(
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                )
+
+                startActivity(intent)
+                finishAffinity();
+            }else{
+                Toast.makeText(this@Account,"Logout unsuccessfull ",Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+
+    fun editProfile(userId:Int){
+        var intent = Intent(this@Account,EditProfile::class.java);
+        intent.putExtra("userId",userId);
+        startActivity(intent);
     }
 }
