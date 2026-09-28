@@ -91,6 +91,14 @@ class MainActivity : AppCompatActivity() {
                 finish();
             } else {
                 userId = user.id;
+                repository.getUserById(userId).observe(this@MainActivity) { updatedUser ->
+                    if (updatedUser != null) {
+                        profileIcon.text = updatedUser.name
+                            ?.firstOrNull()
+                            ?.uppercase()
+                            ?: ""
+                    }
+                }
                 repository.getAllNotes(user.id).observe(this@MainActivity){userNotes->
                     if(userNotes.isEmpty()){
                         recyclerView.visibility = View.GONE;
@@ -101,7 +109,6 @@ class MainActivity : AppCompatActivity() {
                         adapter.updateNotes(userNotes);
                     }
                 }
-                profileIcon.text = user.name?.get(0).toString();
                 Toast.makeText(this@MainActivity, "Welcome " + user.name, Toast.LENGTH_SHORT).show();
             }
         }

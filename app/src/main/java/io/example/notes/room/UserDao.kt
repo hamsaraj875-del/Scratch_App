@@ -25,7 +25,7 @@ interface UserDao {
     suspend fun loginUser(email: String, password: String): User?
 
     @Query("SELECT * FROM users WHERE id=:userId")
-    suspend fun getUserById(userId:Int): User;
+    fun getUserById(userId:Int): LiveData<User>;
 
     @Query("SELECT * FROM users WHERE email=:email")
     suspend fun getUserByEmail(email:String):User?;

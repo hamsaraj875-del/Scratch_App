@@ -54,11 +54,12 @@ class Account : AppCompatActivity() {
             finish();
         }else{
             lifecycleScope.launch{
-                user = repository.getUserById(userId);
-                accountName.text = user.name;
-                accountEmail.text = user.email;
-                infoName.text = user.name;
-                infoEmail.text = user.email;
+                repository.getUserById(userId).observe(this@Account){user->
+                    accountName.text = user.name;
+                    accountEmail.text = user.email;
+                    infoName.text = user.name;
+                    infoEmail.text = user.email;
+                }
             }
         }
 

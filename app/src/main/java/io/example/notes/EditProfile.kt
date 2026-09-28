@@ -35,7 +35,7 @@ class EditProfile: AppCompatActivity() {
         var userId = -1;
 
         editName = findViewById(R.id.editName);
-        editEmail = findViewById(R.id.editName);
+        editEmail = findViewById(R.id.editEmail);
         cancelButton = findViewById(R.id.cancelButton);
         backButton = findViewById(R.id.backButton);
         saveChangesButton = findViewById(R.id.saveChangesButton);

@@ -15,7 +15,7 @@ class DatabaseRepository(private val userDao: UserDao, private val noteDao: Note
         return userDao.insertUser(user);
     }
 
-    suspend fun getUserById(userId:Int): User {
+    fun getUserById(userId:Int): LiveData<User> {
         return userDao.getUserById(userId);
     }
 
