@@ -5,7 +5,6 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import androidx.room.Update
 
 @Dao
 interface UserDao {
@@ -15,17 +14,23 @@ interface UserDao {
     @Delete
     suspend fun deleteUser(user:User);
 
-    @Query("UPDATE users SET password = :newPassword WHERE email = :email ")
-    suspend fun updateUserPassword(email:String,newPassword:String):Int;
+    @Query("UPDATE users SET password = :newPassword WHERE id=:userId ")
+    suspend fun updateUserPassword(userId:Int,newPassword:String):Int;
 
-    @Query("UPDATE users SET name = :name , email = :email WHERE id=:userId")
-    suspend fun updateProfile(userId:Int,name:String,email:String):Int;
+    @Query("UPDATE users SET name = :name WHERE id=:userId")
+    suspend fun updateName(userId:Int,name:String):Int;
+
+    @Query("UPDATE users SET email=:email WHERE id=:userId")
+    suspend fun updateEmail(userId:Int,email:String):Int;
 
     @Query("SELECT * FROM users WHERE email = :email AND password = :password LIMIT 1")
     suspend fun loginUser(email: String, password: String): User?
 
     @Query("SELECT * FROM users WHERE id=:userId")
     fun getUserById(userId:Int): LiveData<User>;
+
+    @Query("SELECT * FROM users WHERE id = :userId")
+    fun getUser(userId:Int):User;
 
     @Query("SELECT * FROM users WHERE email=:email")
     suspend fun getUserByEmail(email:String):User?;

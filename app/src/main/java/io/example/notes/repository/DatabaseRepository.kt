@@ -19,8 +19,20 @@ class DatabaseRepository(private val userDao: UserDao, private val noteDao: Note
         return userDao.getUserById(userId);
     }
 
-    suspend fun updateProfile(userId:Int,name:String,email:String):Int{
-        return userDao.updateProfile(userId,name,email);
+    suspend fun updateName(userId:Int,name:String):Int{
+        return userDao.updateName(userId,name);
+    }
+
+    suspend fun updateEmail(userId:Int,name:String):Int{
+        return userDao.updateEmail(userId,name);
+    }
+
+    suspend fun updatePassword(userId:Int,newPassword:String):Int{
+        return userDao.updateUserPassword(userId,newPassword);
+    }
+
+    suspend fun getUser(userId:Int):User{
+        return userDao.getUser(userId);
     }
 
     suspend fun getLoggedInUser():User?{

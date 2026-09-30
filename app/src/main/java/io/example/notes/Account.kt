@@ -43,7 +43,6 @@ class Account : AppCompatActivity() {
         infoName = findViewById(R.id.infoName);
         infoEmail = findViewById(R.id.infoEmail);
         btnEditProfile = findViewById(R.id.btnEditProfile);
-        btnChangePassword = findViewById(R.id.btnChangePassword);
 
 
         var db = AppDatabase.getInstance(applicationContext);
@@ -96,6 +95,14 @@ class Account : AppCompatActivity() {
     fun editProfile(userId:Int){
         var intent = Intent(this@Account,EditProfile::class.java);
         intent.putExtra("userId",userId);
+        intent.putExtra("value","edit")
+        startActivity(intent);
+    }
+
+    fun changePassword(userId:Int){
+        var intent = Intent(this@Account,EditProfile::class.java);
+        intent.putExtra("userId",userId);
+        intent.putExtra("value","password");
         startActivity(intent);
     }
 }
