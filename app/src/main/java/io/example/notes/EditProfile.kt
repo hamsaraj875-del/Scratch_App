@@ -37,8 +37,8 @@ class EditProfile: AppCompatActivity() {
         var changeNameButton : MaterialButton;
         var changeEmailButton : MaterialButton;
         var changePasswordButton : MaterialButton;
+        var profileInitial : TextView;
         var user:User?=null;
-
 
         editName = findViewById(R.id.editName);
         editEmail = findViewById(R.id.editEmail);
@@ -46,48 +46,48 @@ class EditProfile: AppCompatActivity() {
         changeNameButton = findViewById(R.id.changeNameButton);
         changeEmailButton = findViewById(R.id.changeEmailButton);
         changePasswordButton = findViewById(R.id.changePasswordButton);
+        profileInitial = findViewById(R.id.profileInitial);
 
         var db = AppDatabase.getInstance(applicationContext);
         var repository = DatabaseRepository(db.userDao(),db.noteDao());
 
         var userId = intent.getIntExtra("userId",-1);
 
-        if(userId==-1){
-            finish();
-        }
+        lifecycleScope.launch {
+            user = repository.getUser(userId)
 
-        lifecycleScope.launch{
-            user = repository.getUser(userId);
+            if (user != null) {
+                profileInitial.text = user?.name?.firstOrNull()?.toString() ?: "";
+            } else {
+                Toast.makeText(this@EditProfile,"user not found boss",Toast.LENGTH_SHORT).show();
+                finish()
+            }
         }
-;
-
         changePasswordButton.setOnClickListener{
-            if(editPassword.toString().isEmpty()){
+            if(editPassword.text.toString().isEmpty()){
                 Toast.makeText(this@EditProfile,"Password field cannot be empty",Toast.LENGTH_SHORT).show();
-            }else if(editPassword.toString().equals(user?.password)){
+            }else if(editPassword.text.toString().equals(user?.password)){
                 Toast.makeText(this@EditProfile,"Password is same",Toast.LENGTH_SHORT).show();
             }else{
-                passwordHandler(userId,editPassword.toString(),repository);
+                passwordHandler(userId,editPassword.text.toString(),repository);
             }
         }
-
         changeEmailButton.setOnClickListener{
-            if(editEmail.toString().isEmpty()){
+            if(editEmail.text.toString().isEmpty()){
                 Toast.makeText(this@EditProfile,"Email field cannot be empty",Toast.LENGTH_SHORT).show();
-            }else if(editEmail.toString().equals(user?.password)){
-                Toast.makeText(this@EditProfile,"Password is same",Toast.LENGTH_SHORT).show();
+            }else if(editEmail.text.toString().equals(user?.password)){
+                Toast.makeText(this@EditProfile,"email is same",Toast.LENGTH_SHORT).show();
             }else{
-                emailHandler(userId,editEmail.toString(),repository);
+                emailHandler(userId,editEmail.text.toString(),repository);
             }
         }
-
         changeNameButton.setOnClickListener{
-            if(editName.toString().isEmpty()){
+            if(editName.text.toString().isEmpty()){
                 Toast.makeText(this@EditProfile,"Name field cannot be empty",Toast.LENGTH_SHORT).show();
-            }else if(editName.toString().equals(user?.name)){
-                Toast.makeText(this@EditProfile,"Password is same",Toast.LENGTH_SHORT).show();
+            }else if(editName.text.toString().equals(user?.name)){
+                Toast.makeText(this@EditProfile,"name is same",Toast.LENGTH_SHORT).show();
             }else{
-                nameHandler(userId,editName.toString(),repository);
+                nameHandler(userId,editName.text.toString(),repository);
             }
         }
     }

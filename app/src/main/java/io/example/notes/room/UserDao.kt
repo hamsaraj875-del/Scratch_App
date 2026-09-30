@@ -30,7 +30,7 @@ interface UserDao {
     fun getUserById(userId:Int): LiveData<User>;
 
     @Query("SELECT * FROM users WHERE id = :userId")
-    fun getUser(userId:Int):User;
+    suspend fun getUser(userId:Int):User;
 
     @Query("SELECT * FROM users WHERE email=:email")
     suspend fun getUserByEmail(email:String):User?;
