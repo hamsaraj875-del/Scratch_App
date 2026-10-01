@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -36,6 +37,9 @@ class MainActivity : AppCompatActivity() {
         //variable declarations
         val profileIcon: TextView;
         val newRoomButton: Button;
+        var recyclerView : RecyclerView;
+        var homeContent : LinearLayout;
+        var Loader : ProgressBar;
         var userId:Int=0;
 
 
@@ -47,7 +51,9 @@ class MainActivity : AppCompatActivity() {
         //variable intializations
         newRoomButton = findViewById(R.id.newRoomButton);
         profileIcon = findViewById(R.id.profileIcon)
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        homeContent  = findViewById(R.id.homeContent);
+        Loader = findViewById(R.id.progressBar);
         val emptyNotesLayout = findViewById<LinearLayout>(R.id.emptyNotesLayout)
 
 
@@ -78,6 +84,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launch {
+            Loader.visibility = View.VISIBLE
+            homeContent.visibility = View.GONE
             var user = repository.getLoggedInUser();
             var users = repository.getAllUser();
             if(users == null || users.isEmpty()){
@@ -91,6 +99,8 @@ class MainActivity : AppCompatActivity() {
                 finish();
             } else {
                 userId = user.id;
+                Loader.visibility = View.GONE
+                homeContent.visibility = View.VISIBLE
                 repository.getUserById(userId).observe(this@MainActivity) { updatedUser ->
                     if (updatedUser != null) {
                         profileIcon.text = updatedUser.name

@@ -37,6 +37,8 @@ class EditProfile: AppCompatActivity() {
         var changeNameButton : MaterialButton;
         var changeEmailButton : MaterialButton;
         var changePasswordButton : MaterialButton;
+        var cancelButton : MaterialButton;
+        var backButton :ImageView;
         var profileInitial : TextView;
         var user:User?=null;
 
@@ -47,10 +49,11 @@ class EditProfile: AppCompatActivity() {
         changeEmailButton = findViewById(R.id.changeEmailButton);
         changePasswordButton = findViewById(R.id.changePasswordButton);
         profileInitial = findViewById(R.id.profileInitial);
+        cancelButton = findViewById(R.id.cancelButton);
+        backButton = findViewById(R.id.backButton);
 
         var db = AppDatabase.getInstance(applicationContext);
         var repository = DatabaseRepository(db.userDao(),db.noteDao());
-
         var userId = intent.getIntExtra("userId",-1);
 
         lifecycleScope.launch {
@@ -89,6 +92,13 @@ class EditProfile: AppCompatActivity() {
             }else{
                 nameHandler(userId,editName.text.toString(),repository);
             }
+        }
+
+        cancelButton.setOnClickListener{
+            finish();
+        }
+        backButton.setOnClickListener{
+            finish();
         }
     }
 
