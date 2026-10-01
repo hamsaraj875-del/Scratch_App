@@ -66,6 +66,10 @@ class DatabaseRepository(private val userDao: UserDao, private val noteDao: Note
         return noteDao.insertNote(note);
     }
 
+    suspend fun updatePin(noteId:Int,pin:Int):Boolean{
+        return noteDao.updatePin(noteId,pin)>0;
+    }
+
     suspend fun deleteNote(note:Note){
         return noteDao.deleteNote(note);
     }

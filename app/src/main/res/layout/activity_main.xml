@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -9,15 +10,16 @@
     android:background="@color/deep_blue"
     tools:context=".MainActivity">
 
+
+
     <LinearLayout
         android:id="@+id/homeContent"
         android:layout_width="0dp"
-        android:layout_height="70dp"
+        android:layout_height="72dp"
         android:background="@color/navy_blue"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingStart="16dp"
-
         android:paddingEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,10 +27,10 @@
 
         <ImageView
             android:id="@+id/appIcon"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="58dp"
+            android:layout_height="58dp"
             android:contentDescription="Scratch"
-            android:padding="6dp"
+            android:padding="5dp"
             android:src="@drawable/logo" />
 
         <LinearLayout
@@ -51,6 +53,7 @@
                 android:id="@+id/appSubtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:text="Your notes, your space"
                 android:textColor="@color/gray_light"
                 android:textSize="12sp" />
@@ -59,11 +62,12 @@
 
         <TextView
             android:id="@+id/profileIcon"
-            android:layout_width="38dp"
-            android:layout_height="38dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:background="@drawable/profile"
-            android:gravity="center"
             android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
             android:text="?"
             android:textColor="@android:color/white"
             android:textSize="16sp"
@@ -71,64 +75,183 @@
 
     </LinearLayout>
 
-    <Button
+
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/newRoomButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:layout_marginTop="12dp"
-        android:text="Create New Notes"
-        android:drawableEnd="@drawable/baseline_arrow_forward_24"
+        android:layout_width="0dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="16dp"
+        android:text="Create New Note"
+        android:textAllCaps="false"
         android:textColor="@color/white"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:drawableEnd="@drawable/baseline_arrow_forward_24"
+        android:drawablePadding="8dp"
+        android:paddingStart="18dp"
+        android:paddingEnd="16dp"
         android:backgroundTint="@color/warning_yellow"
-        android:textSize="16dp"
-        app:cornerRadius="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/homeContent"
-        tools:layout_editor_absoluteX="16dp" />
+        app:cornerRadius="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/homeContent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/notesScrollView"
+        android:layout_width="0dp"
         android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:paddingBottom="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newRoomButton"
-        tools:layout_editor_absoluteX="0dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/newRoomButton">
 
-    </androidx.recyclerview.widget.RecyclerView>
-
-    <LinearLayout
-        android:id="@+id/emptyNotesLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="No notes yet"
-            android:textColor="@color/white"
-            android:textSize="22sp"
-            android:textStyle="bold" />
+            android:orientation="vertical"
+            android:paddingTop="20dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Create your first note"
-            android:textColor="@color/gray_light"
-            android:textSize="15sp" />
 
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/pinnedSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/pinnedHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:gravity="center_vertical"
+                    android:paddingStart="18dp"
+                    android:paddingEnd="18dp">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:contentDescription="Pinned"
+                        android:src="@drawable/pin"
+                        android:backgroundTint="@color/warning_yellow" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="9dp"
+                        android:layout_weight="1"
+                        android:text="Pinned Notes"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+
+                </LinearLayout>
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/pinnedRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="156dp"
+                    android:clipToPadding="false"
+                    android:overScrollMode="never"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="8dp"
+                    tools:listitem="@layout/pinned_note_card" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/recentHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:gravity="center_vertical"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Recent Notes"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+
+            </LinearLayout>
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:paddingBottom="10dp"
+                tools:listitem="@layout/notes_card_view" />
+
+
+            <LinearLayout
+                android:id="@+id/emptyNotesLayout"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="30dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:alpha="0.7"
+                    android:src="@drawable/logo"
+                    android:contentDescription="No notes" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="No notes yet"
+                    android:textColor="@android:color/white"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:gravity="center"
+                    android:text="Create your first note and start writing."
+                    android:textColor="@color/gray_light"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
     <ProgressBar
         android:id="@+id/progressBar"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:visibility="visible"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

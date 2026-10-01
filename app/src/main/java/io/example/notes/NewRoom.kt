@@ -3,6 +3,7 @@ package io.example.notes
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -31,6 +32,7 @@ class NewRoom : AppCompatActivity() {
 
         var noteTitle : TextInputEditText;
         var noteContent:TextInputEditText;
+        var backBtn : ImageView;
         var btnSave: Button;
 
 
@@ -43,6 +45,11 @@ class NewRoom : AppCompatActivity() {
         noteTitle = findViewById(R.id.noteTitle);
         noteContent = findViewById(R.id.noteContent);
         btnSave = findViewById(R.id.btnSave);
+        backBtn = findViewById(R.id.btnBack);
+
+        backBtn.setOnClickListener{
+            finish();
+        }
 
         btnSave.setOnClickListener{
             var title = noteTitle.text.toString();

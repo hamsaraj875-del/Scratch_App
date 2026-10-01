@@ -19,4 +19,8 @@ interface NoteDao{
     @Query("SELECT * FROM notes WHERE userId = :userId")
     fun getAllNotesOfUser(userId:Int): LiveData<List<Note>>;
 
+    @Query("UPDATE notes SET pinned=:pin WHERE id=:noteId")
+    suspend fun updatePin(noteId:Int,pin:Int):Int;
+
+
 }

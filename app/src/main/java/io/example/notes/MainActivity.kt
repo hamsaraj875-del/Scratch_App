@@ -14,6 +14,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -37,9 +38,12 @@ class MainActivity : AppCompatActivity() {
         //variable declarations
         val profileIcon: TextView;
         val newRoomButton: Button;
-        var recyclerView : RecyclerView;
+        var recyclerView: RecyclerView
+        var pinnedRecyclerView: RecyclerView
+        var pinnedHeader: LinearLayout;
         var homeContent : LinearLayout;
         var Loader : ProgressBar;
+        var notesScrollView : NestedScrollView;
         var userId:Int=0;
 
 
@@ -51,9 +55,12 @@ class MainActivity : AppCompatActivity() {
         //variable intializations
         newRoomButton = findViewById(R.id.newRoomButton);
         profileIcon = findViewById(R.id.profileIcon)
-        recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        recyclerView = findViewById(R.id.recyclerView)
+        pinnedRecyclerView = findViewById(R.id.pinnedRecyclerView)
         homeContent  = findViewById(R.id.homeContent);
         Loader = findViewById(R.id.progressBar);
+        pinnedHeader = findViewById(R.id.pinnedHeader);
+        notesScrollView = findViewById(R.id.notesScrollView);
         val emptyNotesLayout = findViewById<LinearLayout>(R.id.emptyNotesLayout)
 
 
@@ -62,30 +69,44 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+        recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
+        pinnedRecyclerView.layoutManager =
+            LinearLayoutManager(
+                this@MainActivity,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
 
-        recyclerView.layoutManager = LinearLayoutManager(this@MainActivity);
-        val adapter = NoteAdapter(
+        val adapter = UnpinnedNote(
             emptyList(),
-            // Delete callback
             { note ->
                 deleteNote(note, repository)
             },
-            // Open note callback
+            { note-> updatePin(note,repository,1);},
             { note ->
                 showNoteReader(note)
             }
         )
-        recyclerView.adapter = adapter
+        val pinnedAdapter = PinnedNote(
+            emptyList(),
+            { note -> updatePin(note, repository, 0) },
+            { note -> showNoteReader(note) }
+        )
 
+        recyclerView.adapter = adapter;
+        pinnedRecyclerView.adapter = pinnedAdapter;
 
-        //new note creation
         newRoomButton.setOnClickListener{
             noteCreation(userId);
         }
 
         lifecycleScope.launch {
-            Loader.visibility = View.VISIBLE
-            homeContent.visibility = View.GONE
+            Loader.visibility = View.VISIBLE;
+            homeContent.visibility = View.GONE;
+            newRoomButton.visibility = View.GONE;
+            notesScrollView.visibility = View.GONE;
+            pinnedRecyclerView.visibility = View.GONE
+            pinnedHeader.visibility = View.GONE;
             var user = repository.getLoggedInUser();
             var users = repository.getAllUser();
             if(users == null || users.isEmpty()){
@@ -100,7 +121,9 @@ class MainActivity : AppCompatActivity() {
             } else {
                 userId = user.id;
                 Loader.visibility = View.GONE
-                homeContent.visibility = View.VISIBLE
+                homeContent.visibility = View.VISIBLE;
+                newRoomButton.visibility = View.VISIBLE;
+                notesScrollView.visibility = View.VISIBLE;
                 repository.getUserById(userId).observe(this@MainActivity) { updatedUser ->
                     if (updatedUser != null) {
                         profileIcon.text = updatedUser.name
@@ -109,14 +132,28 @@ class MainActivity : AppCompatActivity() {
                             ?: ""
                     }
                 }
-                repository.getAllNotes(user.id).observe(this@MainActivity){userNotes->
-                    if(userNotes.isEmpty()){
-                        recyclerView.visibility = View.GONE;
-                        emptyNotesLayout.visibility = View.VISIBLE;
-                    }else{
-                        emptyNotesLayout.visibility = View.GONE;
-                        recyclerView.visibility = View.VISIBLE;
-                        adapter.updateNotes(userNotes);
+                repository.getAllNotes(user.id).observe(this@MainActivity) { userNotes ->
+                    if (userNotes.isEmpty()) {
+                        recyclerView.visibility = View.GONE
+                        emptyNotesLayout.visibility = View.VISIBLE
+                    } else {
+                        emptyNotesLayout.visibility = View.GONE
+                        val pinnedNotes = userNotes.filter { it.pinned==1 }
+                        val normalNotes = userNotes.filter { it.pinned==0 }
+                        if (pinnedNotes.isEmpty()) {
+                            pinnedRecyclerView.visibility = View.GONE;
+                            pinnedHeader.visibility = View.GONE;
+                        } else {
+                            pinnedRecyclerView.visibility = View.VISIBLE
+                            pinnedHeader.visibility = View.VISIBLE;
+                            pinnedAdapter.updateNotes(pinnedNotes)
+                        }
+                        if (normalNotes.isEmpty()) {
+                            recyclerView.visibility = View.GONE
+                        } else {
+                            recyclerView.visibility = View.VISIBLE
+                            adapter.updateNotes(normalNotes)
+                        }
                     }
                 }
                 Toast.makeText(this@MainActivity, "Welcome " + user.name, Toast.LENGTH_SHORT).show();
@@ -143,6 +180,22 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch{
             repository.deleteNote(note);
             Toast.makeText(this@MainActivity,note.title + " Deleted Successfully ",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    fun updatePin(note:Note,repository:DatabaseRepository,pin:Int){
+        lifecycleScope.launch{
+            var value = repository.updatePin(note.id,pin);
+            if(value && pin==1){
+                var noteName = note.title;
+                Toast.makeText(this@MainActivity,"$noteName pinned",Toast.LENGTH_SHORT).show();
+            }else if(value && pin==0){
+                var noteName = note.title;
+                Toast.makeText(this@MainActivity,"$noteName unpinned",Toast.LENGTH_SHORT).show();
+            }
+            else{
+                Toast.makeText(this@MainActivity,"Error occured please try again",Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

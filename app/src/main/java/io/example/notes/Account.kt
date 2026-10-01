@@ -78,7 +78,7 @@ class Account : AppCompatActivity() {
             var logout = repository.logout(userId);
             if(logout){
                 Toast.makeText(this@Account,"Logout Successfull", Toast.LENGTH_SHORT).show();
-                var intent = Intent(this@Account, SignupActivity::class.java);
+                var intent = Intent(this@Account, LoginActivity::class.java);
                 intent.addFlags(
                     Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 )
@@ -90,7 +90,6 @@ class Account : AppCompatActivity() {
             }
         }
     }
-
 
     fun editProfile(userId:Int){
         var intent = Intent(this@Account,EditProfile::class.java);
